@@ -1,5 +1,4 @@
 #!/bin/python3
-import heapq
 import sys
 
 
@@ -22,7 +21,7 @@ def compress(index, bwt):
         else:
             rle_encoded.append((bwt[i - 1], count))
             count = 1
-    if (rle_encoded[-1][0]!=bwt[-1]):
+    if rle_encoded[-1][0] != bwt[-1]:
         rle_encoded.append((bwt[-1], count))
 
     # index  colvoBitForLen
@@ -41,7 +40,7 @@ def compress(index, bwt):
             if len(data) % 8 != 0:
                 data += "0" * (8 - len(data) % 8)
             for i in range(0, len(data), 8):
-                file.write(int(data[i : i + 8], 2).to_bytes(1, "big"))
+                file.write(int(data[i: i + 8], 2).to_bytes(1, "big"))
     except:
         print("Что-то не так")
 
@@ -71,7 +70,7 @@ def decompress(text):
             matrix[i] = bwt[i].to_bytes(1, "big") + matrix[i]
         matrix = sorted(matrix)
     print(matrix)
-    original = matrix[index-1]
+    original = matrix[index - 1]
     with open(sys.argv[3], "wb") as file:
         for byte in original:
             file.write(byte.to_bytes(1, "big"))
