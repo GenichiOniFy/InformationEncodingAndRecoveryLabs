@@ -1,5 +1,6 @@
 #!/bin/python3
 
+
 def encode_hamming(data):
     # Вычисляем количество контрольных битов
     m = len(data)
@@ -110,12 +111,11 @@ def main():
         return
 
     encoded = encode_hamming(data)
-    #print(f"Закодированное сообщение: {encoded}")
 
     corrupted = introduce_error(encoded)
     print(f"Сообщение с ошибкой: {corrupted}")
 
-    corrected = correct_hamming(corrupted)
+    correct_hamming(corrupted)
 
 
 if __name__ == "__main__":
