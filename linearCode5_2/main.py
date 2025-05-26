@@ -100,7 +100,6 @@ def main():
 
     # Коррекция ошибки
     corrected, syndrome, error_vector = correct_error(received)
-    # Теперь выводится как обычный кортеж (1, 0, 0)
     print(f"\nСиндром: {[int(x) for x in syndrome]}")
     print(f"Вектор ошибки: {''.join(map(str, error_vector))}")
 
