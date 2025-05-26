@@ -1,8 +1,9 @@
 #!/bin/python3
-import sys
-import os
 import math
+import os
 import struct
+import sys
+
 
 def ReadText(file_name):
     try:
@@ -162,5 +163,9 @@ if __name__ == "__main__":
     elif sys.argv[1] == "compress":
         with open(sys.argv[3], "wb") as compressFile:
             compressFile.write(compress(text))
+        print(
+            "Степень сжатия:",
+            os.path.getsize(sys.argv[2]) / os.path.getsize(sys.argv[3]),
+        )
     else:
         print("Не известная команда")

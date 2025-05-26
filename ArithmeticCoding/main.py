@@ -1,4 +1,5 @@
-import math
+#!/bin/python3
+
 import os
 import sys
 from collections import defaultdict
@@ -39,6 +40,8 @@ def arithmetic_encode(data, prob_table, total_weight):
 
     for byte in data:
         # Находим диапазон для текущего символа
+        b_high = 0
+        b_low = 0
         for b, b_low, b_high in prob_table:
             if b == byte:
                 break
@@ -156,8 +159,7 @@ def arithmetic_decode(input_file, output_file):
     with open(output_file, "wb") as f:
         for _ in range(total):
             # Находим текущий символ
-            threshold = ((value - low + 1) * total_weight -
-                         1) // (high - low + 1)
+            threshold = ((value - low + 1) * total_weight - 1) // (high - low + 1)
 
             for byte, b_low, b_high in prob_table:
                 if b_low <= threshold < b_high:
@@ -173,8 +175,7 @@ def arithmetic_decode(input_file, output_file):
                 low = (low << 1) & ((1 << PRECISION) - 1)
                 high = ((high << 1) & ((1 << PRECISION) - 1)) | 1
                 if bit_stream:
-                    value = ((value << 1) & ((1 << PRECISION) - 1)
-                             ) | bit_stream.pop(0)
+                    value = ((value << 1) & ((1 << PRECISION) - 1)) | bit_stream.pop(0)
                 else:
                     value = (value << 1) & ((1 << PRECISION) - 1)
 
@@ -182,8 +183,8 @@ def arithmetic_decode(input_file, output_file):
 if __name__ == "__main__":
     if len(sys.argv) != 4:
         print("Использование:")
-        print("  Сжатие:   python arith.py compress input.txt output.bin")
-        print("  Распаковка: python arith.py decompress output.bin result.txt")
+        print("  Сжатие:   python main.py compress input.txt output.bin")
+        print("  Распаковка: python main.py decompress output.bin result.txt")
         sys.exit(1)
 
     command = sys.argv[1]

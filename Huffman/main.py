@@ -1,5 +1,6 @@
 #!/bin/python3
 import heapq
+import os
 import sys
 
 from Node import *
@@ -60,14 +61,27 @@ def compress(frequencyDict, text):
     data = fr + compr
     if len(data) % 8 != 0:
         data += "0" * (8 - len(data) % 8)
+
+    original_size = len(text)
+    # +2 for lenDict and colvoBitForLen bytes
+    compressed_size = len(data) // 8 + 2
+
     try:
         with open(sys.argv[3], "wb") as file:
             file.write(len(frequencyDict).to_bytes(1, "big"))
             file.write(colvoBitForLen.to_bytes(1, "big"))
             for i in range(0, len(data), 8):
                 file.write(int(data[i : i + 8], 2).to_bytes(1, "big"))
+
+        # Calculate and print compression ratio
+        compression_ratio = original_size / compressed_size
+        print(f"Original size: {original_size} bytes")
+        print(f"Compressed size: {compressed_size} bytes")
+        print(f"Compression ratio: {compression_ratio:.2f}")
+
     except:
         print("Что-то не так")
+
 
 def decompress(text):
     lenDict = text[0]
@@ -76,32 +90,36 @@ def decompress(text):
     dic = dict()
     for _ in range(lenDict):
         key = int(text[:8], 2)
-        lenCode = int(text[8 : 8 + colvoBitLenCode],2)
+        lenCode = int(text[8 : 8 + colvoBitLenCode], 2)
         value = text[8 + colvoBitLenCode : 8 + colvoBitLenCode + lenCode]
         text = text[8 + colvoBitLenCode + lenCode :]
         dic[value] = key
     try:
-        with open(sys.argv[3], 'wb') as file:
-            while len(text)>0:
-                code=''
+        with open(sys.argv[3], "wb") as file:
+            while len(text) > 0:
+                code = ""
                 while code not in dic.keys():
-                    code+=text[0]
-                    text=text[1:]
-                file.write(dic[code].to_bytes(1,"big"))
+                    code += text[0]
+                    text = text[1:]
+                file.write(dic[code].to_bytes(1, "big"))
     except:
         exit(0)
 
 
-# struct=[len_dict, colvo_bit_len_code, (value, len_code, code)*len_dict, compress_text]
-#           8               8             8     cblc      lc
+if __name__ == "__main__":
+    if len(sys.argv) != 4:
+        print(
+            "Использование: python main.py compress/decompress input_file output_file"
+        )
+        exit(1)
 
-
-if __name__=='__main__':
     text = ReadText(sys.argv[2])
-    if sys.argv[1]=='decompress':
+    if sys.argv[1] == "decompress":
         decompress(text)
-    elif sys.argv[1]=='compress':
-        frequencyDict = {char: text.count(char) for char in set(text)}  # Frequency analysis
+    elif sys.argv[1] == "compress":
+        frequencyDict = {
+            char: text.count(char) for char in set(text)
+        }  # Frequency analysis
         head = buildHuffmanTree(frequencyDict)
         getCodes(head)
         compress(frequencyDict, text)

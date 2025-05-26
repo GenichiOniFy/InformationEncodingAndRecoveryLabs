@@ -1,3 +1,5 @@
+#!/bin/python3
+
 def encode_hamming(data):
     # Вычисляем количество контрольных битов
     m = len(data)

@@ -1,3 +1,5 @@
+#!/bin/python3
+
 import numpy as np
 
 # Генераторная матрица G для кода (5,2)
